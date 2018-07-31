@@ -12,7 +12,7 @@
     availability_zone: melbourne
     timeout: 200
     flavor: "1"
-    security_groups: default,docker
+    security_groups: default,docker,hadoop
   register: masterInstance
 
 - name: Launch the rest instance(s)
@@ -29,7 +29,7 @@
     availability_zone: melbourne
     timeout: 200
     flavor: "1"
-    security_groups: default,docker
+    security_groups: default,docker,hadoop
   with_sequence: start=1 end={{num}} format=slave%x
   register: slaveInstances
 

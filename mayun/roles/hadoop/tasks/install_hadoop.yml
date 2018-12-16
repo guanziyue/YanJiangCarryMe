@@ -1,0 +1,17 @@
+---
+- name: Check hadoop file
+  stat: 
+    path: "/tmp/hadoop-{{hadoop_version}}.tar.gz"
+  register: downloaded
+
+- name: Download hadoop
+  get_url: 
+    url: "https://archive.apache.org/dist/hadoop/common/stable/hadoop-{{hadoop_version}}.tar.gz"
+    dest: /tmp
+  when: downloaded.stat.exists == false  
+  
+- name: Unpack hadoop source code
+  unarchive: 
+    src: "/tmp/hadoop-{{hadoop_version}}.tar.gz"
+    dest: "{{ hadoop_path }}"
+    remote_src: yes  

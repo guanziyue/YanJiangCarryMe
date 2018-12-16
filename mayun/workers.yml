@@ -1,0 +1,32 @@
+
+# Get Master Public Key
+# - hosts: master 
+#   remote_user: ubuntu
+#   vars_files:
+#    - vars/user.yml
+#    - vars/var_basic.yml
+#    - vars/var_workers.yml
+#   roles:
+#     - fetch_public_key
+
+- hosts: workers 
+  remote_user: ubuntu
+  become: yes
+  vars_files:
+   - vars/user.yml
+   - vars/var_basic.yml
+   - vars/var_workers.yml
+  vars:
+    add_user: true
+    generate_key: false
+    open_firewall: false
+    disable_firewall: false
+    install_hadoop: true
+    config_hadoop: true
+  roles:
+    # - user
+    # - authorized
+    # - java
+    - hadoop
+
+

@@ -7,18 +7,18 @@
   tasks:
     - name: Check hive file
       stat: 
-        path: {{ source_dir }}/apache-hive-2.3.3-bin.tar.gz
+        path: {{ source_dir }}/apache-hive-3.1.0-bin.tar.gz
       register: downloaded
 
     - name: Download hive
       get_url: 
-        url: 'http://apache.mirror.digitalpacific.com.au/hive/hive-2.3.3/apache-hive-2.3.3-bin.tar.gz'
+        url: 'http://www.strategylions.com.au/mirror/hive/hive-3.1.0/apache-hive-3.1.0-bin.tar.gz'
         dest: {{ source_dir }}
       when: downloaded.stat.exists == false
 
     - name: Unpack hive source code
       unarchive: 
-        src: {{ source_dir }}/apache-hive-2.3.3-bin.tar.gz
+        src: {{ source_dir }}/apache-hive-3.1.0-bin.tar.gz
         dest: {{ service_dir }}
         remote_src: yes
 

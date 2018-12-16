@@ -1,0 +1,16 @@
+source_dir: /home/ubuntu/project
+service_dir: /home/ubuntu/project
+data_dir: /home/ubuntu/project/data
+java_home: /usr/lib/jvm/java-8-openjdk-amd64
+hadoop_version: 3.1.1
+hive_version: 3.1.1
+spark_version: 2.3.2
+hbase_version: 2.1.1
+flink_version: 1.7.0
+scala_version: 2.12
+namenode_host: 43.240.98.36
+mysql_root_pass: carrymefly
+spark_master_host: 43.240.96.35
+remote_user: ubuntu
+master_ip: 43.240.98.36
+phoenix_version: 5.0.0-HBase-2.0

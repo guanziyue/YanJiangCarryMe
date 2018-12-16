@@ -1,0 +1,62 @@
+---
+- hosts: instanceGroup
+  remote_user: "{{ remote_user }}"
+  roles:
+    - flink
+
+# - hosts: slaveGroup
+#   remote_user: "{{ remote_user }}"
+#   become: yes
+#   tasks:
+#   - name: Add Hadoop Public Key 
+#     authorized_key: 
+#       user: {{ user }} 
+#       key: "{{ lookup('file', '/tmp/id_{{master_ip}}_{{user}}.pub') }}"
+#   - name: start the yarn nodemanagers
+#     command: “{{ service_dir }}/hadoop-{{ hadoop_version }}/sbin/yarn-daemon.sh start nodemanager”
+#   - name: start the hdfs datanodes
+#     command: “{{ service_dir }}/hadoop-{{ hadoop_version }}/sbin/hadoop-daemon.sh --script hdfs start datanode”
+   
+# - hosts: slave1
+#   remote_user: "{{ remote_user }}"
+#   become: yes
+#   tasks:
+#   - name: start the spark master
+#     command: "{{ service_dir }}/spark-{{ spark_version }}/sbin/start-master.sh"
+#     environment:
+#       SPARK_LOG_DIR: "{{ service_dir }}/spark/log"
+#       SPARK_WORKER_DIR: "{{ service_dir }}/spark/work"
+#       SPARK_LOCAL_DIRS: "{{ service_dir }}/spark/data"
+
+# - hosts: master
+#   remote_user: "{{ remote_user }}"
+#   become: yes
+#   tasks:
+#   - name: start the spark slaves3
+#     command: "{{ service_dir }}/spark-{{ spark_version }}/sbin/start-slave.sh spark://{{hostvars['slave1']['ansible_default_ipv4']['address']}}:7077"
+#     environment:
+#       SPARK_LOG_DIR: "{{ service_dir }}/spark/log"
+#       SPARK_WORKER_DIR: "{{ service_dir }}/spark/work"
+#       SPARK_LOCAL_DIRS: "{{ service_dir }}/spark/data"
+
+# - hosts: slave2
+#   remote_user: "{{ remote_user }}"
+#   become: yes
+#   tasks:
+#   - name: start the spark slaves
+#     command: "{{ service_dir }}/spark-{{ spark_version }}/sbin/start-slave.sh spark://{{hostvars['slave1']['ansible_default_ipv4']['address']}}:7077"
+#     environment:
+#       SPARK_LOG_DIR: "{{ service_dir }}/spark/log"
+#       SPARK_WORKER_DIR: "{{ service_dir }}/spark/work"
+#       SPARK_LOCAL_DIRS: "{{ service_dir }}/spark/data"
+
+# - hosts: slave3
+#   remote_user: "{{ remote_user }}"
+#   become: yes
+#   tasks:
+#   - name: start the spark slaves
+#     command: "{{ service_dir }}/spark-{{ spark_version }}/sbin/start-slave.sh spark://{{hostvars['slave1']['ansible_default_ipv4']['address']}}:7077"
+#     environment:
+#       SPARK_LOG_DIR: "{{ service_dir }}/spark/log"
+#       SPARK_WORKER_DIR: "{{ service_dir }}/spark/work"
+#       SPARK_LOCAL_DIRS: "{{ service_dir }}/spark/data"

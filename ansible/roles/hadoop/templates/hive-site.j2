@@ -38,7 +38,7 @@
 
 <property>
   <name>javax.jdo.option.ConnectionPassword</name>
-  <value>hive</value>
+  <value>carrymefly</value>
   <description>password to use against metastore database</description>
 </property>
 
@@ -63,32 +63,5 @@
 <property>
   <name>hive.cli.print.header</name>
   <value>true</value>
-</property>
-
-<property>
-  <name>mapreduce.output.fileoutputformat.compress.codec</name>
-  <value>com.hadoop.compression.lzo.LzopCodec</value>
-</property>
-
-<property>
-  <name>hive.exec.compress.output</name>
-  <value>true</value>
-</property>
-
-<property>
-  <name>mapreduce.output.fileoutputformat.compress</name>
-  <value>true</value>
-</property>
-
-<property>
-  <name>hive.exec.compress.intermediate</name>
-  <value>true</value>
-  <description> This controls whether intermediate files produced by Hive between
-multiple map-reduce jobs are compressed. The compression codec and other options
-are determined from hadoop config variables mapred.output.compress* </description>
-</property>
-<property>
-    <name>hive.intermediate.compression.codec</name>
-    <value>com.hadoop.compression.lzo.LzoCodec</value>
 </property>
 </configuration>

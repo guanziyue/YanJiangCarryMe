@@ -1,0 +1,30 @@
+---
+- name: Check flink file
+  stat: 
+    path: "{{ source_dir }}/flink-{{ flink_version }}-bin-hadoop28-scala_{{ scala_version }}.tgz"
+  register: downloaded
+
+- name: Download flink
+  get_url: 
+    url: 'http://mirror.ventraip.net.au/apache/flink/flink-{{ flink_version }}/flink-{{ flink_version }}-bin-hadoop28-scala_{{ scala_version }}.tgz'
+    dest: "{{ source_dir }}"
+  when: downloaded.stat.exists == false
+
+- name: Unpack flink source code
+  unarchive: 
+    src: "{{ source_dir }}/flink-{{ flink_version }}-bin-hadoop28-scala_{{ scala_version }}.tgz"
+    dest: "{{ service_dir }}"
+    remote_src: yes
+
+- name: Add HADOOP_CLASSPATH
+  lineinfile:
+    dest: /home/ubuntu/.bashrc
+    insertafter: 'EOF'  
+    line: 'export HADOOP_CLASSPATH={{ service_dir }}/hadoop-{{ hadoop_version }}/etc/hadoop'
+  become: yes
+
+- name: Refresh.bashrc
+  shell: source /home/ubuntu/.bashrc
+  args: 
+    executable: /bin/bash
+  become: yes

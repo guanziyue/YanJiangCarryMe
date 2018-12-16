@@ -17,9 +17,9 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-	<property>
+  <property>
 		<name>fs.defaultFS</name>
-        <value>hdfs://{{ namenode_host }}:9000</value>
+    <value>hdfs://{{ namenode_host }}:9000</value>
 	</property>
 	<property>
 		<name>io.file.buffer.size</name>
@@ -27,38 +27,6 @@
 	</property>
    <property>
 		<name>hadoop.tmp.dir</name>
-		<value>/data/bmw/tmp/hadoop</value>
+		<value>{{ service_dir }}/hadoop-{{ hadoop_version }}/tmp/hadoop</value>
 	</property>
-<!-- 	<property>
-		<name>fs.checkpoint.period</name>
-	    <value>3600</value>
-		<description>The number of seconds between two periodic checkpoints. </description>
-	</property>
-	<property>
-		 <name>fs.checkpoint.size</name>
-		 <value>67108864</value>
-	</property> -->
-    <property>
-        <name>io.compression.codecs</name>
-        <value>org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec</value>
-    </property>
-    <property>
-        <name>io.compression.codec.lzo.class</name>
-        <value>com.hadoop.compression.lzo.LzopCodec</value>
-    </property>
-    <property>
-        <name>hadoop.proxyuser.hue.hosts</name>
-        <value>*</value>
-    </property>
-    <property>
-        <name>hadoop.proxyuser.hue.groups</name>
-        <value>*</value>
-    </property>
-    <property>
-      <name>fs.trash.interval</name>
-      <value>10080</value>
-      <description>Number of minutes between trash checkpoints.
-      If zero, the trash feature is disabled.
-      </description>
-    </property>
 </configuration>

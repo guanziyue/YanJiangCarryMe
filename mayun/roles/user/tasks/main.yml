@@ -1,0 +1,37 @@
+---
+- name: Unmount volume from directory
+  mount: 
+    path: /mnt
+    state: unmounted
+
+- name: Format disk
+  filesystem: 
+    fstype: ext4
+    dev: /dev/vdb
+
+- name: Creates directory for volume
+  file: 
+    path: "{{ whole_path }}"
+    state: directory
+    owner: "{{ user }}"
+    mode: 0777
+    
+- name: Mount volume to directory
+  mount: 
+    path: "{{ whole_path }}"
+    src: /dev/vdb
+    fstype: ext4
+    state: mounted
+
+- name: copyPublic Key
+  shell: "ls /home/{{ user }}/.ssh|grep '.pub' |wc -l"
+  register: key_exist
+  ignore_errors: true
+
+- name: Generate Public key
+  user:
+    name: "{{ user }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+  when: "key_exist.stdout == '0' and generate_key"

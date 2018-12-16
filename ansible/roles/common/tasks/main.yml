@@ -1,0 +1,105 @@
+- name: Unmount volume from directory
+  mount: 
+    path: /mnt
+    state: unmounted
+  become: yes
+
+- name: Format disk
+  filesystem: 
+    fstype: ext4
+    dev: /dev/vdb
+  become: yes
+
+# - name: Creates directory for volume
+#   file: 
+#     path: "{{ source_dir }}"
+#     state: directory
+#     mode: 0777
+    
+- name: Mount volume to directory
+  mount: 
+    path: "{{ source_dir }}"
+    src: /dev/vdb
+    fstype: ext4
+    state: mounted
+  become: yes
+  
+- name: Install software
+  apt: 
+    name: "{{item}}"
+    state: latest
+  become: yes
+  vars: 
+    item:
+    - unzip
+
+- name: Add JAVA_HOME
+  lineinfile:
+    dest: /etc/profile
+    insertafter: 'EOF'  
+    line: 'export JAVA_HOME={{java_home}}'
+  become: yes
+
+- name: Add path
+  lineinfile: 
+    dest: /etc/profile
+    insertafter: 'EOF'  
+    line: 'export PATH="${JAVA_HOME}/bin:$PATH"' 
+    state: present 
+  become: yes   
+
+- name: Refresh.bashrc
+  shell: source /etc/profile
+  args: 
+    executable: /bin/bash  
+  become: yes
+
+- name: copy hosts
+  copy:
+      src: hosts
+      dest: /etc/hosts
+      owner: root
+      group: root
+      mode: 0777
+  become: yes
+
+- name: copy public key
+  copy:
+      src: id_rsa.pub
+      dest: /home/ubuntu/id_rsa.pub
+      owner: ubuntu
+      group: ubuntu
+      mode: 0600
+  become: yes
+
+- name: copy private key
+  copy:
+      src: ~/.ssh/spark.key
+      dest: /home/ubuntu/.ssh/id_rsa
+      owner: ubuntu
+      group: ubuntu
+      mode: 0600
+  become: yes
+
+- name: Get Lastest Public From Hadoop Master
+  fetch: 
+    src: /home/ubuntu/id_rsa.pub
+    dest: /tmp/id_{{ ansible_host }}_ubuntu.pub
+    flat: yes
+    
+- name: Add Hadoop Public Key 
+  authorized_key: 
+    user: ubuntu
+    key: "{{ lookup('file', '/tmp/id_{{master_ip}}_ubuntu.pub') }}"
+
+  # - name: Add docker GPG key
+  #   apt-key: url=https://download.docker.com/linux/ubuntu/gpg
+  # - name: Add Docker APT repository
+  #   apt_repository:
+  #     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+
+  # - name: Install Docker
+  #   apt: name=docker-ce
+  #   update_cache: yes
+  #   state: latest 
+

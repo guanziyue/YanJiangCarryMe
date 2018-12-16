@@ -17,37 +17,16 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-	<property>
+  <property>
 		<name>dfs.namenode.name.dir</name>
-        <value>{{ data_dir }}/hadoop/name</value>
+    <value>{{ data_dir }}/hadoop/name</value>
 	</property>
-<!--	<property>
-		<name>dfs.blocksize</name>
-		<value>536870912</value>
-	</property>-->
-	<property>
-		<name>dfs.namenode.handler.count</name>
-		<value>40</value>
-	</property>
-<!--	<property>
-		<name>dfs.namenode.secondary.http-address</name>
-		<value>data1:50090</value>
-	</property>-->
-	<property>
+  <property>
 		<name>dfs.datanode.data.dir</name>
-        <value>{{ data_dir }}/hadoop/data</value>
+    <value>{{ data_dir }}/hadoop/data</value>
 	</property>
-	<property>
-		<name>dfs.replication</name>
-		<value>1</value>
-	</property>
-    <property>
-        <name>dfs.webhdfs.enabled</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>dfs.namenode.rpc-bind-host</name>
-        <value>0.0.0.0</value>
-    </property>
+  <property>
+    <name>dfs.namenode.rpc-bind-host</name>
+    <value>0.0.0.0</value>
+  </property>
 </configuration>
-

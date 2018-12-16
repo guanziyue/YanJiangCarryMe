@@ -1,10 +1,10 @@
 - name: Unmount volume from directory
- mount: 
+  mount: 
     path: /mnt
     state: unmounted
 
 - name: Format disk
- filesystem: 
+  filesystem: 
     fstype: ext4
     dev: /dev/vdb
 
@@ -13,7 +13,7 @@
     path: /home/ubuntu/project
     state: directory
     mode: 0777
-
+    
 - name: Mount volume to directory
   mount: 
     path: /home/ubuntu/project
@@ -24,45 +24,57 @@
 - name: Install software
   apt: name={{item}}
   with_items: 
-      - git
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - software-properties-common
+      - openjdk-8-jdk
+      - unzip
   force: yes
   update_cache: yes
   state: latest
 
-# - name: Add docker GPG key
-#   apt-key: url=https://download.docker.com/linux/ubuntu/gpg
-# - name: Add Docker APT repository
-#   apt_repository:
-#     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+- name: Add JAVA_HOME
+  lineinfile:
+    dest: /etc/profile
+    insertafter: 'EOF'  
+    line: 'export JAVA_HOME={/usr/lib/jvm/java-8-openjdk-amd64}'
 
-# - name: Install Docker
-#   apt: name=docker-ce
-#   update_cache: yes
-#   state: latest
+- name: Add path
+  lineinfile: 
+    dest: /etc/profile
+    insertafter: 'EOF'  
+    line: 'export PATH="${JAVA_HOME}/bin:$PATH"' 
+    state: present    
 
-- name: Add apt-repository for oracle java
-  apt_repository: 
-    repo: 'ppa:webupd8team/java'
+- name: Refresh.bashrc
+  shell: source /etc/profile
+  args: 
+    executable: /bin/bash  
 
-- name: Accept oracle license
-  debconf:
-    name: oracle-java8-installer
-    question: shared/accepted-oracle-license-v1-1
-    value: 'true'
-    vtype: select
+- name: copy hosts
+  copy:
+      src: hosts
+      dest: /etc/hosts
+      owner: ubuntu
+      group: ubuntu
+      mode: 0777   
 
-- name: Install java
-  apt: name={{item}}
-  with_items: 
-      - oracle-java8-installer
-      - oracle-java8-set-default
-  allow_unauthenticated: yes
-  force: yes
-  update_cache: yes
-  state: latest
-  install_recommends: no
+- name: Get Lastest Public From Hadoop Master
+  fetch: 
+    src: /home/ubuntu/id_rsa.pub
+    dest: /tmp/id_{{ ansible_host }}_ubuntu.pub
+    flat: yes
+
+- name: Add Hadoop Public Key 
+  authorized_key: 
+    user: "{{ user }}"
+    key: "{{ lookup('file', '/tmp/id_{{master_ip}}_{{user}}.pub') }}"
+
+  # - name: Add docker GPG key
+  #   apt-key: url=https://download.docker.com/linux/ubuntu/gpg
+  # - name: Add Docker APT repository
+  #   apt_repository:
+  #     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+
+  # - name: Install Docker
+  #   apt: name=docker-ce
+  #   update_cache: yes
+  #   state: latest 
 
